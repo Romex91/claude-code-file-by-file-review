@@ -5,7 +5,7 @@ File-by-file PR review using Claude Code. When a PR touches hundreds of files, t
 ## Install
 
 ```bash
-git clone https://github.com/anthropics/claude-code-file-by-file-review.git
+git clone https://github.com/Romex91/claude-code-file-by-file-review.git
 cd claude-code-file-by-file-review
 ./install.sh
 ```
