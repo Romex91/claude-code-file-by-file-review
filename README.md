@@ -2,80 +2,49 @@
 
 File-by-file PR review using Claude Code. When a PR touches hundreds of files, this toolset reviews each changed file individually and produces a structured GOOD/BAD report.
 
-## Setup
-
-Copy two directories into your project root:
+## Install
 
 ```bash
-cp -r massive-CC-review/ /path/to/your/repo/
-cp -r .claude/commands/massive-review.md /path/to/your/repo/.claude/commands/
+git clone https://github.com/anthropics/claude-code-file-by-file-review.git
+cd claude-code-file-by-file-review
+./install.sh
 ```
-
-Make sure the scripts are executable (they should be already):
-
-```bash
-chmod +x /path/to/your/repo/massive-CC-review/*
-```
-
-That's it. No dependencies beyond git and bash.
 
 ## Usage
 
-Checkout the branch you want to review, then run the slash command in Claude Code:
+Open Claude Code in any repo, checkout the branch you want to review, and run:
 
 ```
-/massive-review Check for missing error handling
+/file-by-file-review Check for missing error handling
 ```
 
-The argument is your review focus — what you want Claude to look for in each file. Examples:
+The argument is your review focus — what Claude should look for in each file. More examples:
 
 ```
-/massive-review Look for broken imports or references to deleted modules
-/massive-review Check that all React components handle loading and error states
-/massive-review Verify the migration from class components to hooks is correct
+/file-by-file-review Look for broken imports or references to deleted modules
+/file-by-file-review Check that all React components handle loading and error states
+/file-by-file-review Verify the migration from class components to hooks is correct
 ```
 
-Claude will:
-1. Detect the merge-base against `origin/main` or `origin/master`
-2. Review every changed file in parallel (batches of 10)
-3. Mark each file as GOOD or BAD with a reason
-4. Print a summary of all problems found
+Claude will review every changed file in parallel and print a summary of all problems found.
 
-## Report output
+## Report
 
-All state lives in `/tmp/massive-review/` (auto-cleans on reboot):
+Results are written to `/tmp/massive-review/report/` (auto-cleans on reboot):
 
 ```
-/tmp/massive-review/
-  review_instructions.txt    # your review focus
-  base_ref.txt               # merge-base commit hash
-  changed_files.txt          # list of changed files (one per line)
-  report/
-    src__utils__foo.ts_GOOD.txt
-    src__api__client.ts_BAD.txt
+/tmp/massive-review/report/
+  src__utils__foo.ts_GOOD.txt
+  src__api__client.ts_BAD.txt
 ```
 
-Each report file contains:
-```
-src/api/client.ts
-git diff <base>..HEAD -- src/api/client.ts
-BAD: fetch calls missing error handling for network failures
-```
+Each file contains the file path, the git diff command to reproduce, and the verdict with reason.
 
-## Scripts reference
+## How it works
 
-All scripts live in `massive-CC-review/` and can be called standalone:
-
-| Script | Usage | Description |
-|--------|-------|-------------|
-| `set-review-instructions` | `"<instructions>"` | Initialize review: fetch remote, compute merge-base, cache changed files |
-| `get-number-of-changed-files` | (no args) | Print count of changed files |
-| `print-git-diff` | `<file_index>` | Print diff, before/after content, and review instructions for file N (1-based) |
-| `mark-git-diff-as-good` | `<file_index> "<reason>"` | Record GOOD verdict |
-| `mark-git-diff-as-bad` | `<file_index> "<reason>"` | Record BAD verdict |
-
-## Requirements
-
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
-- Git
-- Bash
+1. Fetches latest `origin/main` (or `origin/master`) and computes the merge-base
+2. Lists all changed files between the merge-base and HEAD
+3. Reviews each file in parallel using Claude Code subagents (batches of 10)
+4. Each subagent sees the diff, full file before/after, and your review instructions
+5. Marks each file GOOD or BAD with a concise reason
+6. Prints a final summary listing all BAD files

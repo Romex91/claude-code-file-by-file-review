@@ -9,14 +9,14 @@ You are reviewing a massive PR file-by-file. Your goal is to review every change
 
 Run this command to set up the review:
 ```
-massive-CC-review/set-review-instructions "$ARGUMENTS"
+SCRIPTS_DIR/set-review-instructions "$ARGUMENTS"
 ```
 
 ## Step 2: Get file count
 
 Run:
 ```
-massive-CC-review/get-number-of-changed-files
+SCRIPTS_DIR/get-number-of-changed-files
 ```
 
 This gives you the total number N of changed files.
@@ -30,7 +30,7 @@ For each Task, provide these instructions:
 ```
 You are reviewing a single file from a massive PR. You have access to the Bash tool.
 
-1. Run: `massive-CC-review/print-git-diff <INDEX>` (where <INDEX> is the file number assigned to you)
+1. Run: `SCRIPTS_DIR/print-git-diff <INDEX>` (where <INDEX> is the file number assigned to you)
 2. Read the output carefully. It contains:
    - The file path and index
    - The git diff showing what changed
@@ -40,9 +40,9 @@ You are reviewing a single file from a massive PR. You have access to the Bash t
 3. Analyze the change against the review instructions
 4. Make your verdict:
    - If the change looks correct and has no issues per the review instructions, run:
-     `massive-CC-review/mark-git-diff-as-good <INDEX> "<concise reason>"`
+     `SCRIPTS_DIR/mark-git-diff-as-good <INDEX> "<concise reason>"`
    - If you find a problem per the review instructions, run:
-     `massive-CC-review/mark-git-diff-as-bad <INDEX> "<concise description of the problem>"`
+     `SCRIPTS_DIR/mark-git-diff-as-bad <INDEX> "<concise description of the problem>"`
 5. Return a one-line summary: "File <INDEX> (<filepath>): GOOD|BAD — <reason>"
 ```
 
