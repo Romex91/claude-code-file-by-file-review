@@ -84,11 +84,9 @@ If the script reports missing reviews (exit code 1), re-launch Task agents for t
 
 ## Step 4: Print summary
 
-After all files have been reviewed, read all files in `/tmp/massive-review/report/` and print a summary:
+After all files have been reviewed, run:
+```
+SCRIPTS_DIR/compose-summary
+```
 
-1. Total files reviewed
-2. Count of GOOD vs BAD
-3. List of all BAD files with their reasons (read from the `_BAD.txt` files)
-4. A brief overall assessment
-
-Format the summary clearly with markdown.
+Then read `/tmp/massive-review/summary.txt` and print a short verdict to the user.
