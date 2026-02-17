@@ -30,10 +30,10 @@ Claude will review every changed file in parallel and print a summary of all pro
 
 ## Report
 
-Results are written to `/tmp/massive-review/report/` (auto-cleans on reboot):
+Results are written to `/tmp/file-by-file-review/report/` (auto-cleans on reboot):
 
 ```
-/tmp/massive-review/report/
+/tmp/file-by-file-review/report/
   src__utils__foo.ts_GOOD.txt
   src__api__client.ts_BAD.txt
 ```

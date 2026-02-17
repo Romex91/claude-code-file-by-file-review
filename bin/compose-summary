@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REVIEW_DIR="/tmp/massive-review"
+REVIEW_DIR="/tmp/file-by-file-review"
 REPORT_DIR="$REVIEW_DIR/report"
 SUMMARY="$REVIEW_DIR/summary.txt"
 

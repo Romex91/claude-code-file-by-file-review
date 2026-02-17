@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REVIEW_DIR="/tmp/massive-review"
+REVIEW_DIR="/tmp/file-by-file-review"
 
 if [ ! -f "$REVIEW_DIR/changed_files.txt" ]; then
   echo "ERROR: Run set-review-instructions first."

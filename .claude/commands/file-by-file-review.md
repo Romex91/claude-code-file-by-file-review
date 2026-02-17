@@ -89,4 +89,4 @@ After all files have been reviewed, run:
 SCRIPTS_DIR/compose-summary
 ```
 
-Then read `/tmp/massive-review/summary.txt` and print a short verdict to the user.
+Then read `/tmp/file-by-file-review/summary.txt` and print a short verdict to the user.

@@ -6,7 +6,7 @@ if [ $# -lt 2 ]; then
   exit 1
 fi
 
-REVIEW_DIR="/tmp/massive-review"
+REVIEW_DIR="/tmp/file-by-file-review"
 INDEX="$1"
 REASON="$2"
 
