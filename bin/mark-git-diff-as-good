@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [ $# -lt 2 ]; then
-  echo "Usage: massive-CC-review/mark-git-diff-as-good <file_index> \"<reason>\""
+  echo "Usage: mark-git-diff-as-good <file_index> \"<reason>\""
   exit 1
 fi
 

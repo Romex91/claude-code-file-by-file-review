@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [ $# -lt 1 ]; then
-  echo "Usage: massive-CC-review/print-git-diff <file_index>"
+  echo "Usage: print-git-diff <file_index>"
   exit 1
 fi
 

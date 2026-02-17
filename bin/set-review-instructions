@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [ $# -lt 1 ]; then
-  echo "Usage: massive-CC-review/set-review-instructions \"<instructions>\""
+  echo "Usage: set-review-instructions \"<instructions>\""
   exit 1
 fi
 
