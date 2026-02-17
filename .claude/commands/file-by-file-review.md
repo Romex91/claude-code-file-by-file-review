@@ -25,7 +25,7 @@ This gives you the total number N of changed files.
 
 If N > 10 and the effort level is moderate or high, use AskUserQuestion to warn the user before proceeding:
 
-> "This PR has N changed files. Reviewing each file with a separate subagent at this effort level can consume a significant portion of your usage quota. Do you want to proceed?"
+> "This PR has N changed files. Current effort level is <effort-level>. Proceeding may take a lot of tokens, you may want to switch to low-effort (run /model). Proceed?"
 
 Options: "Yes, proceed" and "Cancel". If the user cancels, stop and print "Review cancelled." without spawning any subagents.
 
@@ -57,6 +57,15 @@ You are reviewing a single file from a massive PR. You have access to the Bash t
 Use `subagent_type: "Bash"` for each Task agent. Assign each agent a specific file index.
 
 Process all N files. Launch them in batches of 10 concurrently (files 1-10, then 11-20, etc.).
+
+## Step 3b: All files reviewed?
+
+After all batches complete, run:
+```
+SCRIPTS_DIR/check-missing-reviews
+```
+
+If the script reports missing reviews (exit code 1), re-launch Task agents for the missing file indices listed in the output. Repeat until all files are reviewed (exit code 0).
 
 ## Step 4: Print summary
 
