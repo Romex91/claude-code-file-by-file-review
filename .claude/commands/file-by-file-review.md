@@ -23,15 +23,20 @@ This gives you the total number N of changed files.
 
 ## Step 2b: Usage warning
 
-If N > 10 and the effort level is moderate or high, use AskUserQuestion to warn the user before proceeding:
+If N > 10 AND the effort level is moderate or high, use AskUserQuestion to warn the user before proceeding:
 
-> "This PR has N changed files. Current effort level is <effort-level>. Proceeding may take a lot of tokens, you may want to switch to low-effort (run /model). Proceed?"
+> "This PR has N changed files. Current effort level is <effort-level>. Proceeding may take a lot of tokens. You may want to switch to low-effort"
 
-Options: "Yes, proceed" and "Cancel". If the user cancels, stop and print "Review cancelled." without spawning any subagents.
+Options:
+- "Proceed" — continue with the currently selected model and effort level
+- "Proceed with Haiku" — use `model: "haiku"` on each Task call
+- "Cancel" — stop and print "Review cancelled." without spawning any subagents
+
+If N <= 10 OR the effort level is low, skip this prompt and use the default model.
 
 ## Step 3: Review all files in parallel
 
-Use the Task tool to review files in parallel. Launch batches of ~10 Task agents concurrently. Each Task agent should:
+Use the Task tool to review files in parallel. Launch batches of ~10 Task agents concurrently. Pass the model chosen in Step 2b to each Task call.
 
 For each Task, provide these instructions:
 
@@ -45,13 +50,16 @@ You are reviewing a single file from a massive PR. You have access to the Bash t
    - The full file before the change
    - The full file after the change
    - The review instructions to evaluate against
-3. Analyze the change against the review instructions
-4. Make your verdict:
+3. Analyze the change against the review instructions. ONLY flag issues that directly match the review instructions. Do not flag unrelated concerns. Only focus on changes in this file, DO NOT review other files in the same diff.
+4. Edge cases:
+   - If the file was deleted, mark GOOD unless the deletion itself violates the review instructions.
+   - If the diff is trivial (whitespace, import reordering, auto-formatting), mark GOOD.
+5. Make your verdict.
    - If the change looks correct and has no issues per the review instructions, run:
      `SCRIPTS_DIR/mark-git-diff-as-good <INDEX> "<concise reason>"`
    - If you find a problem per the review instructions, run:
      `SCRIPTS_DIR/mark-git-diff-as-bad <INDEX> "<concise description of the problem>"`
-5. Return a one-line summary: "File <INDEX> (<filepath>): GOOD|BAD — <reason>"
+6. Return a one-line summary: "File <INDEX> (<filepath>): GOOD|BAD — <reason>"
 ```
 
 Use `subagent_type: "Bash"` for each Task agent. Assign each agent a specific file index.
