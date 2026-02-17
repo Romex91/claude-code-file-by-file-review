@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INSTALL_DIR="$HOME/.local/share/massive-cc-review"
+SCRIPTS_DIR="$(pwd)/bin"
 COMMAND_DIR="$HOME/.claude/commands"
 
-# Install scripts
-mkdir -p "$INSTALL_DIR"
-cp massive-CC-review/* "$INSTALL_DIR/"
-chmod +x "$INSTALL_DIR"/*
+# Verify we're in the repo root
+if [[ ! -d "$SCRIPTS_DIR" ]]; then
+  echo "Error: Run this from the repo root (expected $SCRIPTS_DIR to exist)."
+  exit 1
+fi
 
 # Install slash command, replacing SCRIPTS_DIR placeholder
 mkdir -p "$COMMAND_DIR"
-sed "s|SCRIPTS_DIR|$INSTALL_DIR|g" .claude/commands/file-by-file-review.md > "$COMMAND_DIR/file-by-file-review.md"
+sed "s|SCRIPTS_DIR|$SCRIPTS_DIR|g" .claude/commands/file-by-file-review.md > "$COMMAND_DIR/file-by-file-review.md"
 
 echo "Installed."
-echo "  Scripts: $INSTALL_DIR/"
+echo "  Scripts: $SCRIPTS_DIR/"
 echo "  Command: $COMMAND_DIR/file-by-file-review.md"
 echo ""
 echo "Usage: open Claude Code in any repo and run:"
