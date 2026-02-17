@@ -60,6 +60,13 @@ You are reviewing a single file from a massive PR. You have access to the Bash t
    - If you find a problem per the review instructions, run:
      `SCRIPTS_DIR/mark-git-diff-as-bad <INDEX> "<concise description of the problem>"`
 6. Return a one-line summary: "File <INDEX> (<filepath>): GOOD|BAD — <reason>"
+7. This point is VERY VERY VERY IMPORTANT! Do not check if any of the scripts exist, just run them assuming they are there (trust your setup is correct).
+Good:
+`SCRIPTS_DIR/print-git-diff <INDEX>`
+`SCRIPTS_DIR/mark-git-diff-as-good <INDEX> "<concise reason>"`
+Extremely Bad:
+`find $HOME -name "mark-good" -o -name "mark-bad" 2>/dev/null | head -5"`
+`which print-git-diff`
 ```
 
 Use `subagent_type: "Bash"` for each Task agent. Assign each agent a specific file index.
