@@ -1,6 +1,6 @@
 ---
 description: "Review a massive PR file-by-file, looking for problems in each changed file"
-allowed-tools: ["Bash", "Read", "Grep", "Glob", "Task"]
+allowed-tools: ["Bash", "Read", "Grep", "Glob", "Task", "AskUserQuestion"]
 ---
 
 You are reviewing a massive PR file-by-file. Your goal is to review every changed file against the user's review instructions and produce a GOOD/BAD verdict for each file.
@@ -20,6 +20,14 @@ SCRIPTS_DIR/get-number-of-changed-files
 ```
 
 This gives you the total number N of changed files.
+
+## Step 2b: Usage warning
+
+If N > 10 and the effort level is moderate or high, use AskUserQuestion to warn the user before proceeding:
+
+> "This PR has N changed files. Reviewing each file with a separate subagent at this effort level can consume a significant portion of your usage quota. Do you want to proceed?"
+
+Options: "Yes, proceed" and "Cancel". If the user cancels, stop and print "Review cancelled." without spawning any subagents.
 
 ## Step 3: Review all files in parallel
 
